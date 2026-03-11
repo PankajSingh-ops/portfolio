@@ -38,7 +38,7 @@ export default function ExperienceSection() {
 
                                 {/* Content */}
                                 <div
-                                    className={`ml-12 w-full sm:ml-0 sm:w-1/2 ${isLeft ? "sm:pr-12" : "sm:pl-12"
+                                    className={`w-full pl-12 sm:w-1/2 sm:pl-0 ${isLeft ? "sm:pr-12" : "sm:pl-12"
                                         }`}
                                 >
                                     <div className="group rounded-2xl border border-border bg-surface p-6 transition-all hover:border-accent/20 hover:shadow-lg hover:shadow-accent/5">

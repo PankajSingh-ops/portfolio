@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Layers } from "lucide-react";
+import Link from "next/link";
 import SectionHeading from "@/components/SectionHeading";
 import { projects, ProjectCategory } from "@/data";
 
-const categories: ProjectCategory[] = ["All", "Frontend", "Full-Stack", "API"];
+const categories: ProjectCategory[] = ["All", "Frontend", "Full-Stack", "Mobile"];
 
 export default function ProjectsSection() {
     const [activeFilter, setActiveFilter] = useState<ProjectCategory>("All");
@@ -25,12 +26,12 @@ export default function ProjectsSection() {
                 />
 
                 {/* Filters */}
-                <div className="no-scrollbar mb-12 flex items-center justify-center gap-2 overflow-x-auto">
+                <div className="no-scrollbar mb-12 flex w-full flex-wrap items-center justify-center gap-2 sm:flex-nowrap sm:overflow-x-auto">
                     {categories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveFilter(cat)}
-                            className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${activeFilter === cat
+                            className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-all sm:px-5 sm:py-2 sm:text-sm ${activeFilter === cat
                                     ? "bg-accent text-background shadow-lg shadow-accent/25"
                                     : "border border-border text-muted hover:border-accent/30 hover:text-foreground"
                                 }`}
@@ -45,7 +46,7 @@ export default function ProjectsSection() {
                     <AnimatePresence mode="popLayout">
                         {filtered.map((project) => (
                             <motion.div
-                                key={project.title}
+                                key={project.slug}
                                 layout
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -61,29 +62,60 @@ export default function ProjectsSection() {
 
                                     {/* Hover Overlay */}
                                     <div className="absolute inset-0 flex items-center justify-center gap-3 bg-background/80 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
-                                        <a
-                                            href={project.demo}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background transition-colors hover:bg-accent-light"
-                                        >
-                                            <ExternalLink className="h-3.5 w-3.5" />
-                                            Live Demo
-                                        </a>
-                                        <a
-                                            href={project.github}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold transition-colors hover:border-accent/50"
-                                        >
-                                            <Github className="h-3.5 w-3.5" />
-                                            Code
-                                        </a>
+                                        {!!project.demo && project.demo !== "#" && (
+                                            <a
+                                                href={project.demo}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background transition-colors hover:bg-accent-light"
+                                            >
+                                                <ExternalLink className="h-3.5 w-3.5" />
+                                                Live Demo
+                                            </a>
+                                        )}
+
+                                        {!!project.playStore && project.playStore !== "#" && (
+                                            <a
+                                                href={project.playStore}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background transition-colors hover:bg-accent-light"
+                                            >
+                                                <ExternalLink className="h-3.5 w-3.5" />
+                                                Play Store
+                                            </a>
+                                        )}
+
+                                        {!!project.appStore && project.appStore !== "#" && (
+                                            <a
+                                                href={project.appStore}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background transition-colors hover:bg-accent-light"
+                                            >
+                                                <ExternalLink className="h-3.5 w-3.5" />
+                                                App Store
+                                            </a>
+                                        )}
+
+                                        {(project.showGithub ?? true) &&
+                                            !!project.github &&
+                                            project.github !== "#" && (
+                                                <a
+                                                    href={project.github}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold transition-colors hover:border-accent/50"
+                                                >
+                                                    <Github className="h-3.5 w-3.5" />
+                                                    Code
+                                                </a>
+                                            )}
                                     </div>
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-5">
+                                <div className="flex flex-col p-5">
                                     <h3 className="font-heading text-lg font-semibold">
                                         {project.title}
                                     </h3>
@@ -101,6 +133,17 @@ export default function ProjectsSection() {
                                                 {t}
                                             </span>
                                         ))}
+                                    </div>
+
+                                    {/* Details Link */}
+                                    <div className="mt-4">
+                                        <Link
+                                            href={`/projects/${project.slug}`}
+                                            className="inline-flex items-center text-xs font-semibold text-accent hover:text-accent-light"
+                                        >
+                                            View details
+                                            <ExternalLink className="ml-1 h-3 w-3" />
+                                        </Link>
                                     </div>
                                 </div>
                             </motion.div>
