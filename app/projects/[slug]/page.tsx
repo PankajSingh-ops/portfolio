@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, Github, Clock, Layers, ArrowLeft } from "lucide-react";
 import { projects } from "@/data";
+import ScreenshotCarousel from "@/components/ScreenshotCarousel";
 
 export default async function ProjectPage({
   params,
@@ -97,29 +98,36 @@ export default async function ProjectPage({
           </div>
         </div>
 
-        {/* Screenshots */}
+        {/* Screenshots — grid for ≤2, carousel for 3+ */}
         {project.screenshots.length > 0 && (
-          <div className="mb-10 grid gap-4 md:grid-cols-2">
-            {project.screenshots.map((src) => (
-              <div
-                key={src}
-                className="relative h-56 overflow-hidden rounded-2xl border border-border bg-surface-light sm:h-72"
-              >
-                {src ? (
-                  <Image
-                    src={src}
-                    alt={`${project.title} screenshot`}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center">
-                    <Layers className="h-10 w-10 text-muted/30" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          project.screenshots.length <= 2 ? (
+            <div className="mb-10 grid gap-4 md:grid-cols-2">
+              {project.screenshots.map((src) => (
+                <div
+                  key={src}
+                  className="relative h-56 overflow-hidden rounded-2xl border border-border bg-surface-light sm:h-72"
+                >
+                  {src ? (
+                    <Image
+                      src={src}
+                      alt={`${project.title} screenshot`}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <Layers className="h-10 w-10 text-muted/30" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <ScreenshotCarousel
+              screenshots={project.screenshots}
+              title={project.title}
+            />
+          )
         )}
 
         {/* Description & details */}
